@@ -3,7 +3,7 @@ import torch.nn as nn
 import math
 import torch.nn.functional as F
 import numpy as np
-
+ 
 class TransformerPredictor(nn.Module):
     def __init__(self, arg):
         super(TransformerPredictor, self).__init__()
