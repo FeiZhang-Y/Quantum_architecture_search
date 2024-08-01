@@ -1,5 +1,5 @@
 import argparse
-
+ 
 def task_config(qubitInfo):
     
     parser = argparse.ArgumentParser()
