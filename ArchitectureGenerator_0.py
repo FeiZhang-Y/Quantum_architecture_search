@@ -13,7 +13,7 @@ from quantum_gates import Gate
 import argparse
 import os
 
-
+ 
 class ArchitectureGenerator:
 
     def __init__(self, gate_pool, max_gate_num, num_layers, num_qubits, max_two_qubit_gates_rate,
