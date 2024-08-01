@@ -8,7 +8,7 @@ import csv
 import argparse
 import os
 from config import task_config
-
+ 
 
 def No_QubitsGate(data):
     gatenum = len(data)
