@@ -16,7 +16,7 @@ from scipy import stats
 from config import task_config
 from sklearn.metrics import r2_score
 import pandas as pd
-
+ 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def setup_seed(seed):
