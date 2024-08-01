@@ -1,7 +1,7 @@
 """
 Quantum Gates
 """
-
+ 
 
 class Gate:
     def __init__(self, qubits, name, para_gate):
