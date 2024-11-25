@@ -1,12 +1,12 @@
 import argparse
- 
+
 def task_config(qubitInfo):
     
     parser = argparse.ArgumentParser()
 
     # training
     parser.add_argument("--training_set_rate", type = int, default = 0.8, help = "training set")
-    parser.add_argument("--validation_set_rate", type=int, default=0, help="validation set")
+    parser.add_argument("--validation_set_rate", type=int, default = 0, help="validation set")
     parser.add_argument("--gate_type", type = str, default = ['U3','CZ'], help = "see task_congigs.py")
     parser.add_argument("--learning_rate", type=float, default=0.001, help="learning rate")
     parser.add_argument("--epoch", type=int, default=100, help="epoch")

@@ -3,7 +3,7 @@ import torch.nn as nn
 import math
 import torch.nn.functional as F
 import numpy as np
- 
+
 class TransformerPredictor(nn.Module):
     def __init__(self, arg):
         super(TransformerPredictor, self).__init__()
@@ -24,7 +24,7 @@ class TransformerPredictor(nn.Module):
         # encoding = self.positional_encoding(ops)
         operational = torch.matmul(ops, self.embedding_matrix)
         positional = self.positional_mlp(adj)
-        positional = F.leaky_relu(positional,negative_slope=0.1, inplace=True)
+        positional = F.leaky_relu(positional,negative_slope=0.01, inplace=True)
         # positional = F.softmax(positional)
         input_feature = operational + positional
         output_feature = self.transformer_encoder(input_feature)

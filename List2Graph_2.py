@@ -8,12 +8,15 @@ import csv
 import argparse
 import os
 from config import task_config
- 
+
 
 def No_QubitsGate(data):
+    if isinstance(data,str):
+        data = eval(data)
     gatenum = len(data)
     tt = list(zip(*data))
     qubits = max(max(tt[1]), max(tt[2])) + 1
+
     return qubits,gatenum
 
 def list_to_adj(data):
@@ -106,6 +109,10 @@ def list_to_adj(data):
     return res_graph,res_adj, res_laplacian
 
 def make_it_unique(arc, num_qubit):
+    
+    if isinstance(arc,str):
+        arc = eval(arc)
+        
     lists = []
     final_list = []
 
@@ -171,7 +178,7 @@ def dataset(listParas, current_path,args):
         a1 = np.repeat(qubit,(500,))
         a2 = np.repeat(gate_number,(500,))
         if expType == "MMD":
-            exp_cir = [1 - x[0] for x in exp_cir]
+            exp_cir = [1 - x for x in exp_cir]
         if expType == "KL" and args.KL_Rel:
             idel = (2 ** qubit - 1) * np.log(100)
             exp_cir = -np.log(exp_cir / idel)

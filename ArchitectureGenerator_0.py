@@ -13,7 +13,7 @@ from quantum_gates import Gate
 import argparse
 import os
 
- 
+
 class ArchitectureGenerator:
 
     def __init__(self, gate_pool, max_gate_num, num_layers, num_qubits, max_two_qubit_gates_rate,
@@ -148,7 +148,6 @@ class ArchitectureGenerator:
             exit(0)
 
         return ciru
-
 
     def add_gate(self, log_it_list):  
 
@@ -314,10 +313,10 @@ def main(args):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--qubit', type=int, default=7, help='qubit')
+    parser.add_argument('--qubit', type=int, default=4, help='qubit')
     parser.add_argument('--seed', type=int, default=0, help='gate number')
     args = parser.parse_args()
-    for qubit in range(7,20):
+    for qubit in range(4,7):
         parser.set_defaults(qubits = qubit)
         args = parser.parse_args()
         main(args)

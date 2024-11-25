@@ -7,13 +7,12 @@ import numpy as np
 import tensorcircuit as tc
 from tqdm import tqdm
 import tensorflow as tf
-# from multiprocessing import Pool
 from scipy import stats
 import argparse
 from scipy.linalg import sqrtm
 import os
 import random
- 
+
 tc.set_backend("tensorflow")
 tc.set_dtype("complex128")
 current_path = os.path.join(os.path.abspath('.'),'GeneratedCircuits')
@@ -43,17 +42,21 @@ class ExpressibilityCalculator:
         self.two_qubit_channel_depolarizing_p = None
         self.single_qubit_channel_depolarizing_p = None
         self.bit_flip_p = None
+        self.fidelity_calculation = arg.fidelity_calculation
         if self.noise:
-            self.two_qubit_channel_depolarizing_p = args.two_qubit_channel_depolarizing_p
-            self.single_qubit_channel_depolarizing_p = args.single_qubit_channel_depolarizing_p
-            self.bit_flip_p = args.bit_flip_p
+            self.two_qubit_channel_depolarizing_p = arg.two_qubit_channel_depolarizing_p
+            self.single_qubit_channel_depolarizing_p = arg.single_qubit_channel_depolarizing_p
+            self.bit_flip_p = arg.bit_flip_p
             self.two_qubit_dep_channel = tc.channels.generaldepolarizingchannel(self.two_qubit_channel_depolarizing_p / 15, 2)
             tc.channels.kraus_identity_check(self.two_qubit_dep_channel)
             self.single_qubit_dep_channel = tc.channels.generaldepolarizingchannel(self.single_qubit_channel_depolarizing_p / 3, 1)
             tc.channels.kraus_identity_check(self.single_qubit_dep_channel)
             
     def quantum_circuit(self, structure, param):
-
+        
+        if isinstance(structure, str):
+            structure = eval(structure)
+            
         if self.noise:
             K0 = np.array([[1, 0], [0, 1]]) * np.sqrt(1 - self.bit_flip_p)
             K1 = np.array([[0, 1], [1, 0]]) * np.sqrt(self.bit_flip_p)
@@ -79,7 +82,7 @@ class ExpressibilityCalculator:
             c = tc.Circuit(self.qubits)
             if self.expressibility_type == "MMD":
                 for i in range(self.qubits):
-                    c.h(i) 
+                    c.h(i)
             for i, gate in enumerate(structure):
                 if gate.name == "CZ":
                     c.cz(gate.act_on[0], gate.act_on[1])
@@ -132,14 +135,14 @@ class ExpressibilityCalculator:
             
         return fidelity
     
-    def fidelity_calculator(self, circuits, gateNo):
+    def fidelity_calculator(self, circuits, gateNo, path1):
         
         if self.noise:
             f_name = "_Noisy"
         else:
             f_name = ""
-        
-        path1 = f'{current_path}/qubit-{self.qubits}/Fidelity{f_name}/gate-number-{gateNo}.pkl'
+        if path1 is None:
+            path1 = f'{current_path}/qubit-{self.qubits}/Fidelity{f_name}/gate-number-{gateNo}.pkl'
         
         if self.fidelity_calculation:
             fidelities = []
@@ -152,7 +155,7 @@ class ExpressibilityCalculator:
                 for cir in tqdm(circuits, desc = 'Computing fidelity'):
                     f = self.fidelity_calculator_signal(cir)
                     fidelities.append(f)
-            utils.save_pkl(fidelities, path1)
+            # utils.save_pkl(fidelities, path1)
         else:
             fidelities = utils.load_pkl(path1)
         
@@ -172,8 +175,9 @@ class ExpressibilityCalculator:
         
         return haar_points
     
-    def expressibility_KL(self, circuits, gateNo,path):
-        fidelities = self.fidelity_calculator(circuits, gateNo)
+    def expressibility_KL(self, circuits, gateNo, path):
+        
+        fidelities = self.fidelity_calculator(circuits, gateNo, path1= 1) # path1= None
         haar_points = self.haar_calculator()
         
         expressivity = []
@@ -271,14 +275,14 @@ def main(args):
         else:
             express = fc.expressibility_KL(cir,gateNo,path)
 
-        print(f"qubit: {qubit}, gate number: {gateNo}, successful!")
+       # print(f"qubit: {qubit}, gate number: {gateNo}, successful!")
             
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=0, help="random seed")
     parser.add_argument("--parallel", type=int, default=False, help="parallel processing")
-    parser.add_argument("--num_random_initial", type=int, default=1000, help="number of random initial for fidelities calcualtion")
+    parser.add_argument("--num_random_initial", type=int, default=10000, help="number of random initial for fidelities calcualtion")
     parser.add_argument("--qubits", type=int, default=6, help="qubit")
     parser.add_argument("--noise", type=int, default=False, help="noise")
     parser.add_argument("--two_qubit_channel_depolarizing_p", type=float, default=0.01, help="two_qubit_noise")
