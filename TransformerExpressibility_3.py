@@ -204,6 +204,9 @@ if __name__ == '__main__':
     args.qubitInfo = qubitInfo
     args.batch_size = 64
     args.learning_rate = 0.001
+    args.nhead = 1
+    args.num_layers = 1
+    args.hidden_dim = 16
     
     for expType in ["KL", "KL_R", "MMD", "MMD_Noisy"]:  #
         
@@ -211,27 +214,18 @@ if __name__ == '__main__':
         if expType == "KL":
             args.KL_Rel = False
             args.noise = False
-            args.nhead = 2
-            args.num_layers = 1
-            args.hidden_dim = 32
+            
         if expType == "KL_R":
             args.KL_Rel = True
             args.noise = False
-            args.nhead = 2
-            args.num_layers = 1
-            args.hidden_dim = 16
+
         if expType == "MMD":
             args.KL_Rel = False
             args.noise = False
-            args.nhead = 1
-            args.num_layers = 2
-            args.hidden_dim = 32
+
         if expType == "MMD_Noisy":
             args.KL_Rel = False
             args.noise = True
-            args.nhead = 2
-            args.num_layers = 2
-            args.hidden_dim = 16
         
         result = main(args)
         
@@ -240,107 +234,4 @@ if __name__ == '__main__':
         filename = file0 + f"{args.expressibility_type}-{nowTime}.csv"
         np.savetxt(filename, result, delimiter = ",", header = 'RMSE,Spear,Kendall,R2,RMSE,Spear,Kendall,R2,time')
     
-    for expType in ["KL", "KL_R", "MMD", "MMD_Noisy"]:  #
-        
-        args.expressibility_type = expType
-        if expType == "KL":
-            args.KL_Rel = False
-            args.noise = False
-            args.nhead = 1
-            args.num_layers = 2
-            args.hidden_dim = 16
-        if expType == "KL_R":
-            args.KL_Rel = True
-            args.noise = False
-            args.nhead = 2
-            args.num_layers = 1
-            args.hidden_dim = 32
-        if expType == "MMD":
-            args.KL_Rel = False
-            args.noise = False
-            args.nhead = 2
-            args.num_layers = 2
-            args.hidden_dim = 32
-        if expType == "MMD_Noisy":
-            args.KL_Rel = False
-            args.noise = True
-            args.nhead = 2
-            args.num_layers = 2
-            args.hidden_dim = 32
-        
-        result = main(args)
-        
-        nowTime = datetime.datetime.now().strftime('%Y%m%d')
-        file0 = f"PredictedResult/Result-head-{args.nhead}-layer-{args.num_layers}-hiddenDim-{args.hidden_dim}-"
-        filename = file0 + f"{args.expressibility_type}-{nowTime}.csv"
-        np.savetxt(filename, result, delimiter = ",", header = 'RMSE,Spear,Kendall,R2,RMSE,Spear,Kendall,R2,time')
     
-    for expType in ["KL", "KL_R", "MMD", "MMD_Noisy"]:  #
-        
-        args.expressibility_type = expType
-        if expType == "KL":
-            args.KL_Rel = False
-            args.noise = False
-            args.nhead = 2
-            args.num_layers = 1
-            args.hidden_dim = 16
-        if expType == "KL_R":
-            args.KL_Rel = True
-            args.noise = False
-            args.nhead = 1
-            args.num_layers = 2
-            args.hidden_dim = 16
-        if expType == "MMD":
-            args.KL_Rel = False
-            args.noise = False
-            args.nhead = 2
-            args.num_layers = 1
-            args.hidden_dim = 16
-        if expType == "MMD_Noisy":
-            args.KL_Rel = False
-            args.noise = True
-            args.nhead = 1
-            args.num_layers = 2
-            args.hidden_dim = 32
-        
-        result = main(args)
-        
-        nowTime = datetime.datetime.now().strftime('%Y%m%d')
-        file0 = f"PredictedResult/Result-head-{args.nhead}-layer-{args.num_layers}-hiddenDim-{args.hidden_dim}-"
-        filename = file0 + f"{args.expressibility_type}-{nowTime}.csv"
-        np.savetxt(filename, result, delimiter = ",", header = 'RMSE,Spear,Kendall,R2,RMSE,Spear,Kendall,R2,time')
-    
-    for expType in ["KL", "KL_R", "MMD", "MMD_Noisy"]:  #
-        
-        args.expressibility_type = expType
-        if expType == "KL":
-            args.KL_Rel = False
-            args.noise = False
-            args.nhead = 2
-            args.num_layers = 2
-            args.hidden_dim = 16
-        if expType == "KL_R":
-            args.KL_Rel = True
-            args.noise = False
-            args.nhead = 1
-            args.num_layers = 2
-            args.hidden_dim = 32
-        if expType == "MMD":
-            args.KL_Rel = False
-            args.noise = False
-            args.nhead = 2
-            args.num_layers = 2
-            args.hidden_dim = 16
-        if expType == "MMD_Noisy":
-            args.KL_Rel = False
-            args.noise = True
-            args.nhead = 2
-            args.num_layers = 1
-            args.hidden_dim = 32
-        
-        result = main(args)
-        
-        nowTime = datetime.datetime.now().strftime('%Y%m%d')
-        file0 = f"PredictedResult/Result-head-{args.nhead}-layer-{args.num_layers}-hiddenDim-{args.hidden_dim}-"
-        filename = file0 + f"{args.expressibility_type}-{nowTime}.csv"
-        np.savetxt(filename, result, delimiter = ",", header = 'RMSE,Spear,Kendall,R2,RMSE,Spear,Kendall,R2,time')
